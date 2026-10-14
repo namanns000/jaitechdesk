@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAI TECH</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #16120a;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background-color: #261f12;
+            padding: 16px 20px;
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            color: #f3d085;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .grid-container {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .card {
+            aspect-ratio: 1;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.1s ease, opacity 0.1s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            border: none;
+        }
+        .card:active {
+            transform: scale(0.95);
+            opacity: 0.85;
+        }
+        .card img, .card svg {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 8px;
+            fill: currentColor;
+        }
+        .card span {
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        /* Card Color Themes matching your image */
+        .c-teal { background-color: #134246; color: #52e3e5; }
+        .c-maroon { background-color: #441e2d; color: #f2649a; }
+        .c-brown { background-color: #4a3821; color: #f5b95b; }
+        .c-yellow { background-color: #4a3a11; color: #ffd700; }
+        .c-green { background-color: #1e3f20; color: #7cfc00; }
+
+        /* Modal Overlay for In-App Sheet Viewing */
+        #sheet-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            flex-direction: column;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #261f12;
+            padding: 12px 20px;
+            color: #f3d085;
+        }
+        .close-btn {
+            background: #441e2d;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #sheet-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+
+    <header>JAI TECH</header>
+
+    <div class="grid-container">
+        <!-- Google Link -->
+        <button class="card c-teal" onclick="openSheetInApp('https://google.com')">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+            <span>Google</span>
+        </button>
+
+        <!-- Sheets (Opens In-App with Sheets UI) -->
+        <button class="card c-maroon" onclick="openSheetInApp('https://JAITECHN.COM')">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8-4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8-4H7V7h2v2zm4 0h-2V7h2v2zm4 0h-2V7h2v2z"/></svg>
+            <span>JAI TECH</span>
+        </button>
+
+        <!-- Sale Entry (Form / Sheet) -->
+        <button class="card c-brown" onclick="openSheetInApp('https://forms.gle/7kD7P9oPniSRo2j8A')">
+            <svg viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"/></svg>
+            <span>Sale Entry</span>
+        </button>
+
+        <!-- Customer Data -->
+        <button class="card c-yellow" onclick="openSheetInApp('https://forms.gle/TMYobg7YruhAG9ex8')">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            <span>Customer Data</span>
+        </button>
+
+        <!-- View Customer Data -->
+        <button class="card c-brown" onclick="openSheetInApp('https://docs.google.com/spreadsheets/d/1qLByweFq2SKD3WTK5Vsa3D1pxgUfXIwz0ZYATPPBl3A/edit?usp=sharing')">
+            <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            <span>View Customer Data</span>
+        </button>
+
+        <!-- Rate List -->
+        <button class="card c-green" onclick="openSheetInApp('https://docs.google.com/spreadsheets/d/1NkPkaS4nMT8pBjqR-4YMu7xVcovHvXPSRwoXICT_BXM/edit?usp=sharing')">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <span>Rate List</span>
+        </button>
+
+        <!-- Stock Entry -->
+        <button class="card c-teal" onclick="openSheetInApp('https://forms.gle/sXvmkgmm3ZTbAmm88')">
+            <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.60 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+            <span>Stock Entry</span>
+        </button>
+
+        <!-- Attendance (Google Form) -->
+        <button class="card c-maroon" onclick="openSheetInApp('https://forms.gle/gts4QDF1JKi8BDXs9')">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+            <span>Attendance</span>
+        </button>
+
+        <!-- Installation -->
+        <button class="card c-brown" onclick="openSheetInApp('https://docs.google.com/spreadsheets/d/1uTu_AoTPMxKcBPfomxKJqxZFC4OwxppG7_ZuJpuxPd4/edit?usp=sharing')">
+            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+            <span>Installation</span>
+        </button>
+
+        <!-- Billing -> WhatsApp Group -->
+        <button class="card c-yellow" onclick="openWhatsAppBilling('https://chat.whatsapp.com/G9EPy30e8F00HmAvoXXq64')">
+            <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            <span>Billing</span>
+        </button>
+    </div>
+
+    <!-- In-App Sheet Viewer Modal -->
+    <div id="sheet-modal">
+        <div class="modal-header">
+            <span id="modal-title">JAI TECH</span>
+            <button class="close-btn" onclick="closeSheet()">Back</button>
+        </div>
+        <iframe id="sheet-frame" src=""></iframe>
+    </div>
+
+    <script>
+        function openExternal(url) {
+            window.open(url, '_blank');
+        }
+
+        function openSheetInApp(url) {
+            // Converts standard Google Sheet share link into an embedded view optimized for mobile web
+            let embedUrl = url;
+            if (url.includes('/edit?usp=sharing') || url.includes('/edit')) {
+                embedUrl = url.replace(/\/edit.*$/, '/htmlview?usp=sharing');
+            }
+            document.ioname = 'sheet-frame';
+            document.getElementById('sheet-frame').src = embedUrl;
+            document.getElementById('sheet-modal').style.display = 'flex';
+        }
+
+        function closeSheet() {
+            document.getElementById('sheet-modal').style.display = 'none';
+            document.getElementById('sheet-frame').src = '';
+        }
+
+        function openWhatsAppBilling() {
+            // Replace with your WhatsApp Group link or wa.me link with prefilled text
+            const groupUrl = "https://chat.whatsapp.com/YOUR_WHATSAPP_GROUP_INVITE_CODE";
+            window.open(groupUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
