@@ -192,22 +192,27 @@
         window.open(url, '_blank');
     }
 
-    function openSheetInApp(url) {
+   function openSheetInApp(url) {
     let embedUrl = url;
 
-    // Convert standard sheet edit links into touch-optimized published HTML view
+    // Check if the link is a Google Sheet
     if (url.includes('docs.google.com/spreadsheets')) {
-        // Extracts the base URL and forces mobile-friendly sheet tabs
-        embedUrl = url.replace(/\/edit.*$/, '/pubhtml?widget=true&headers=false');
+        // Extract the unique Sheet ID from the URL
+        const sheetIdMatch = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
+        
+        if (sheetIdMatch && sheetIdMatch[1]) {
+            const sheetId = sheetIdMatch[1];
+            // Use Google's mobile preview layout (works with standard view/share links)
+            embedUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/preview`;
+        }
     }
     
     document.getElementById('sheet-frame').src = embedUrl;
     document.getElementById('sheet-modal').style.display = 'flex';
 
-    // Maintain back-navigation support
+    // Push state for back navigation support
     history.pushState({ modalOpen: true }, "", "#modal");
 }
-
     function closeSheet() {
         const modal = document.getElementById('sheet-modal');
         if (modal.style.display === 'flex') {
