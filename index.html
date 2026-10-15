@@ -68,7 +68,7 @@
             line-height: 1.2;
         }
 
-        /* Card Color Themes matching your image */
+        /* Card Color Themes */
         .c-teal { background-color: #134246; color: #52e3e5; }
         .c-maroon { background-color: #441e2d; color: #f2649a; }
         .c-brown { background-color: #4a3821; color: #f5b95b; }
@@ -172,7 +172,7 @@
         </button>
 
         <!-- Billing -> WhatsApp Group -->
-        <button class="card c-yellow" onclick="openWhatsAppBilling('https://chat.whatsapp.com/G9EPy30e8F00HmAvoXXq64')">
+        <button class="card c-yellow" onclick="openWhatsAppBilling()">
             <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
             <span>Billing</span>
         </button>
@@ -187,32 +187,54 @@
         <iframe id="sheet-frame" src=""></iframe>
     </div>
 
-    <script>
-        function openExternal(url) {
-            window.open(url, '_blank');
-        }
+   <script>
+    function openExternal(url) {
+        window.open(url, '_blank');
+    }
 
-        function openSheetInApp(url) {
-            // Converts standard Google Sheet share link into an embedded view optimized for mobile web
-            let embedUrl = url;
-            if (url.includes('/edit?usp=sharing') || url.includes('/edit')) {
-                embedUrl = url.replace(/\/edit.*$/, '/htmlview?usp=sharing');
+    function openSheetInApp(url) {
+    let embedUrl = url;
+
+    // Convert standard sheet edit links into touch-optimized published HTML view
+    if (url.includes('docs.google.com/spreadsheets')) {
+        // Extracts the base URL and forces mobile-friendly sheet tabs
+        embedUrl = url.replace(/\/edit.*$/, '/pubhtml?widget=true&headers=false');
+    }
+    
+    document.getElementById('sheet-frame').src = embedUrl;
+    document.getElementById('sheet-modal').style.display = 'flex';
+
+    // Maintain back-navigation support
+    history.pushState({ modalOpen: true }, "", "#modal");
+}
+
+    function closeSheet() {
+        const modal = document.getElementById('sheet-modal');
+        if (modal.style.display === 'flex') {
+            modal.style.display = 'none';
+            document.getElementById('sheet-frame').src = '';
+
+            // 2. Clear history state if closed via the "Back" button inside the UI
+            if (location.hash === "#modal") {
+                history.back();
             }
-            document.ioname = 'sheet-frame';
-            document.getElementById('sheet-frame').src = embedUrl;
-            document.getElementById('sheet-modal').style.display = 'flex';
         }
+    }
 
-        function closeSheet() {
-            document.getElementById('sheet-modal').style.display = 'none';
+    // 3. Listen for browser/gesture back navigation
+    window.onpopstate = function(event) {
+        const modal = document.getElementById('sheet-modal');
+        if (modal.style.display === 'flex') {
+            // Close modal UI without quitting or navigating away
+            modal.style.display = 'none';
             document.getElementById('sheet-frame').src = '';
         }
+    };
 
-        function openWhatsAppBilling() {
-            // Replace with your WhatsApp Group link or wa.me link with prefilled text
-            const groupUrl = "https://chat.whatsapp.com/YOUR_WHATSAPP_GROUP_INVITE_CODE";
-            window.open(groupUrl, '_blank');
-        }
-    </script>
+    function openWhatsAppBilling() {
+        const groupUrl = "https://chat.whatsapp.com/G9EPy30e8F00HmAvoXXq64";
+        window.open(groupUrl, '_blank');
+    }
+</script>
 </body>
 </html>
